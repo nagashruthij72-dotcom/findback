@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Found Items | FindBack</title>
+
+    <style>
+
+        /* =========================
+           BASIC RESET
+        ========================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f6f8fc;
+            color: #172033;
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            min-height: 72px;
+            background: white;
+            border-bottom: 1px solid #e8ebf2;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 6%;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 700;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 26px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4b5563;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #2563eb;
+        }
+
+        .nav-button {
+            background: #2563eb;
+            color: white !important;
+            padding: 10px 18px;
+            border-radius: 8px;
+        }
+
+        .nav-button:hover {
+            background: #1d4ed8 !important;
+        }
+
+
+        /* =========================
+           MAIN PAGE
+        ========================= */
+
+        .page {
+            width: 88%;
+            max-width: 1250px;
+
+            margin: 0 auto;
+
+            padding: 55px 0 70px;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            font-size: 36px;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: #6b7280;
+            font-size: 16px;
+        }
+
+
+        /* =========================
+           SEARCH BOX
+        ========================= */
+
+        .search-box {
+            background: white;
+
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+
+            padding: 22px;
+            margin-bottom: 35px;
+
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
+        }
+
+        .search-form {
+            display: grid;
+
+            grid-template-columns:
+                1.5fr
+                1fr
+                1fr
+                auto;
+
+            gap: 12px;
+        }
+
+        .search-form input,
+        .search-form select {
+            width: 100%;
+
+            padding: 13px 14px;
+
+            border: 1px solid #d9dee8;
+            border-radius: 8px;
+
+            background: white;
+
+            font-size: 14px;
+
+            outline: none;
+        }
+
+        .search-form input:focus,
+        .search-form select:focus {
+            border-color: #2563eb;
+        }
+
+        .search-button {
+            border: none;
+
+            background: #2563eb;
+            color: white;
+
+            padding: 0 22px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+        .search-button:hover {
+            background: #1d4ed8;
+        }
+
+
+        /* =========================
+           SECTION TITLE
+        ========================= */
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 20px;
+        }
+
+        .section-title h2 {
+            font-size: 21px;
+            color: #111827;
+        }
+
+        .count {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           ITEMS GRID
+        ========================= */
+
+        .items-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 22px;
+        }
+
+
+        /* =========================
+           ITEM CARD
+        ========================= */
+
+        .item-card {
+            background: white;
+
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 4px 18px rgba(15, 23, 42, 0.04);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .item-card:hover {
+            transform: translateY(-4px);
+
+            box-shadow:
+                0 10px 28px rgba(15, 23, 42, 0.09);
+        }
+
+
+        /* =========================
+           IMAGE
+        ========================= */
+
+        .item-image {
+            width: 100%;
+            height: 210px;
+
+            background: #eef2f7;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            overflow: hidden;
+        }
+
+        .item-image img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+        }
+
+        .no-image {
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           ITEM CONTENT
+        ========================= */
+
+        .item-content {
+            padding: 20px;
+        }
+
+        .item-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+
+            gap: 12px;
+
+            margin-bottom: 10px;
+        }
+
+        .item-name {
+            font-size: 19px;
+            font-weight: 700;
+
+            color: #111827;
+        }
+
+        .category {
+            background: #eff6ff;
+            color: #2563eb;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+            font-weight: 600;
+
+            white-space: nowrap;
+        }
+
+
+        /* =========================
+           DESCRIPTION
+        ========================= */
+
+        .description {
+            color: #6b7280;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+
+            margin-bottom: 16px;
+        }
+
+
+        /* =========================
+           ITEM INFORMATION
+        ========================= */
+
+        .item-info {
+            display: flex;
+            flex-direction: column;
+
+            gap: 9px;
+
+            padding-top: 15px;
+
+            border-top: 1px solid #eef0f4;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+
+            gap: 9px;
+
+            color: #5f6673;
+
+            font-size: 13px;
+        }
+
+        .info-icon {
+            width: 22px;
+
+            text-align: center;
+        }
+
+        .date {
+            color: #7b8190;
+        }
+
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
+
+        .empty-state {
+            background: white;
+
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+
+            padding: 65px 25px;
+
+            text-align: center;
+
+            box-shadow:
+                0 4px 18px rgba(15, 23, 42, 0.04);
+        }
+
+        .empty-icon {
+            font-size: 45px;
+
+            margin-bottom: 15px;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+
+            margin-bottom: 8px;
+
+            color: #111827;
+        }
+
+        .empty-state p {
+            color: #6b7280;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            background: #111827;
+
+            color: #9ca3af;
+
+            text-align: center;
+
+            padding: 25px;
+
+            font-size: 13px;
+        }
+
+        footer strong {
+            color: white;
+        }
+
+
+        /* =========================
+           TABLET
+        ========================= */
+
+        @media (max-width: 950px) {
+
+            .items-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .search-form {
+                grid-template-columns:
+                    1fr 1fr;
+            }
+
+            .search-button {
+                height: 45px;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 650px) {
+
+            .navbar {
+                min-height: auto;
+
+                padding: 18px 5%;
+
+                flex-direction: column;
+
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+
+                justify-content: center;
+            }
+
+            .page {
+                width: 92%;
+
+                padding-top: 35px;
+            }
+
+            .page-header h1 {
+                font-size: 29px;
+            }
+
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+
+            .search-button {
+                height: 45px;
+            }
+
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar">
+
+    <a
+        href="{{ url_for('home') }}"
+        class="logo"
+    >
+        FindBack
+    </a>
+
+
+    <div class="nav-links">
+
+        <a href="{{ url_for('home') }}">
+            Home
+        </a>
+
+        <a href="{{ url_for('lost_items') }}">
+            Lost Items
+        </a>
+
+        <a href="{{ url_for('found_items') }}">
+            Found Items
+        </a>
+
+
+        {% if session.get('user_id') %}
+
+            <a href="{{ url_for('my_reports') }}">
+                My Reports
+            </a>
+
+            <a href="{{ url_for('notifications') }}">
+                Notifications
+            </a>
+
+            <a
+                href="{{ url_for('logout') }}"
+                class="nav-button"
+            >
+                Logout
+            </a>
+
+        {% else %}
+
+            <a
+                href="{{ url_for('login') }}"
+                class="nav-button"
+            >
+                Login
+            </a>
+
+        {% endif %}
+
+    </div>
+
+</nav>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="page">
+
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+        <h1>
+            Found Items
+        </h1>
+
+        <p>
+            Browse items reported by people who found something.
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         SEARCH
+    ========================= -->
+
+    <div class="search-box">
+
+        <form
+            method="GET"
+            action="{{ url_for('found_items') }}"
+            class="search-form"
+        >
+
+            <input
+                type="text"
+                name="search"
+                placeholder="Search item..."
+                value="{{ request.args.get('search', '') }}"
+            >
+
+
+            <select name="category">
+
+                <option value="">
+                    All Categories
+                </option>
+
+                <option
+                    value="wallet"
+                    {% if request.args.get('category') == 'wallet' %}
+                        selected
+                    {% endif %}
+                >
+                    Wallet
+                </option>
+
+                <option
+                    value="phone"
+                    {% if request.args.get('category') == 'phone' %}
+                        selected
+                    {% endif %}
+                >
+                    Phone
+                </option>
+
+                <option
+                    value="laptop"
+                    {% if request.args.get('category') == 'laptop' %}
+                        selected
+                    {% endif %}
+                >
+                    Laptop
+                </option>
+
+                <option
+                    value="bag"
+                    {% if request.args.get('category') == 'bag' %}
+                        selected
+                    {% endif %}
+                >
+                    Bag
+                </option>
+
+                <option
+                    value="keys"
+                    {% if request.args.get('category') == 'keys' %}
+                        selected
+                    {% endif %}
+                >
+                    Keys
+                </option>
+
+                <option
+                    value="documents"
+                    {% if request.args.get('category') == 'documents' %}
+                        selected
+                    {% endif %}
+                >
+                    Documents
+                </option>
+
+                <option
+                    value="camera"
+                    {% if request.args.get('category') == 'camera' %}
+                        selected
+                    {% endif %}
+                >
+                    Camera
+                </option>
+
+                <option
+                    value="other"
+                    {% if request.args.get('category') == 'other' %}
+                        selected
+                    {% endif %}
+                >
+                    Other
+                </option>
+
+            </select>
+
+
+            <input
+                type="text"
+                name="location"
+                placeholder="Location..."
+                value="{{ request.args.get('location', '') }}"
+            >
+
+
+            <button
+                type="submit"
+                class="search-button"
+            >
+                Search
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- =========================
+         RESULTS TITLE
+    ========================= -->
+
+    <div class="section-title">
+
+        <h2>
+            Recently Found
+        </h2>
+
+        <span class="count">
+
+            {{ items|length }}
+
+            item{% if items|length != 1 %}s{% endif %}
+
+        </span>
+
+    </div>
+
+
+    <!-- =========================
+         ITEMS
+    ========================= -->
+
+    {% if items %}
+
+        <div class="items-grid">
+
+            {% for item in items %}
+
+                <div class="item-card">
+
+
+                    <!-- IMAGE -->
+
+                    <div class="item-image">
+
+                        {% if item[6] %}
+
+                            {% set image_path = item[6].replace('static/', '').replace('\\', '/') %}
+
+
+                            <img
+                                src="{{ url_for('static', filename=image_path) }}"
+                                alt="{{ item[1] }}"
+                                onerror="this.style.display='none'; this.parentElement.querySelector('.no-image').style.display='block';"
+                            >
+
+
+                            <div
+                                class="no-image"
+                                style="display: none;"
+                            >
+                                No image available
+                            </div>
+
+
+                        {% else %}
+
+                            <div class="no-image">
+                                No image available
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- CONTENT -->
+
+                    <div class="item-content">
+
+
+                        <div class="item-top">
+
+                            <div class="item-name">
+                                {{ item[1] }}
+                            </div>
+
+
+                            <span class="category">
+                                {{ item[2] }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="description">
+                            {{ item[3] }}
+                        </div>
+
+
+                        <div class="item-info">
+
+
+                            <!-- LOCATION -->
+
+                            <div class="info-row">
+
+                                <span class="info-icon">
+                                    📍
+                                </span>
+
+                                <span>
+                                    {{ item[4] }}
+                                </span>
+
+                            </div>
+
+
+                            <!-- DATE -->
+
+                            <div class="info-row">
+
+                                <span class="info-icon">
+                                    📅
+                                </span>
+
+                                <span class="date">
+                                    Found on {{ item[5] }}
+                                </span>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+    {% else %}
+
+
+        <!-- EMPTY STATE -->
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                🔎
+            </div>
+
+
+            <h3>
+                No found items
+            </h3>
+
+
+            <p>
+                No items match your current search.
+                Try another keyword, category, or location.
+            </p>
+
+        </div>
+
+
+    {% endif %}
+
+</main>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    <strong>
+        FindBack
+    </strong>
+
+    &nbsp;•&nbsp;
+
+    Reconnecting people with their lost belongings.
+
+</footer>
+
+
+</body>
+</html>

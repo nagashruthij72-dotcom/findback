@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Lost Report - FindBack</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        .edit-page {
+            max-width: 850px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .edit-card {
+            background: white;
+            border-radius: 18px;
+            padding: 35px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+        }
+
+        .edit-title {
+            margin-bottom: 8px;
+            font-size: 28px;
+        }
+
+        .edit-subtitle {
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .current-image {
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .current-image img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .save-btn,
+        .cancel-btn {
+            border: none;
+            border-radius: 10px;
+            padding: 13px 22px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .save-btn {
+            background: #111827;
+            color: white;
+        }
+
+        .cancel-btn {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .save-btn:hover {
+            opacity: 0.9;
+        }
+
+        .cancel-btn:hover {
+            background: #e5e7eb;
+        }
+
+        @media (max-width: 600px) {
+
+            .edit-card {
+                padding: 22px;
+            }
+
+            .button-row {
+                flex-direction: column;
+            }
+
+            .save-btn,
+            .cancel-btn {
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <nav>
+
+        <div class="nav-container">
+
+            <a href="{{ url_for('home') }}"
+               class="logo">
+                FindBack
+            </a>
+
+            <div class="nav-links">
+
+                <a href="{{ url_for('home') }}">
+                    Home
+                </a>
+
+                <a href="{{ url_for('report_lost') }}">
+                    Report Lost
+                </a>
+
+                <a href="{{ url_for('report_found') }}">
+                    Report Found
+                </a>
+
+                <a href="{{ url_for('lost_items') }}">
+                    Lost Items
+                </a>
+
+                <a href="{{ url_for('found_items') }}">
+                    Found Items
+                </a>
+
+                {% if session.get("user_id") %}
+
+                    <a href="{{ url_for('my_reports') }}">
+                        My Reports
+                    </a>
+
+                    <a href="{{ url_for('notifications') }}"
+                       class="notification-link">
+
+                        🔔 Notifications
+
+                        {% if notification_count > 0 %}
+
+                            <span class="notification-badge">
+                                {{ notification_count }}
+                            </span>
+
+                        {% endif %}
+
+                    </a>
+
+                    <a href="{{ url_for('logout') }}">
+                        Logout
+                    </a>
+
+                {% else %}
+
+                    <a href="{{ url_for('login') }}">
+                        Login
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =====================================================
+         EDIT PAGE
+    ====================================================== -->
+
+    <main class="edit-page">
+
+        <div class="edit-card">
+
+            <h1 class="edit-title">
+                Edit Lost Report
+            </h1>
+
+            <p class="edit-subtitle">
+                Update the details of your lost item.
+            </p>
+
+
+            <!-- =================================================
+                 FORM
+            ================================================== -->
+
+            <form method="POST"
+                  enctype="multipart/form-data">
+
+
+                <!-- ITEM NAME -->
+
+                <div class="form-group">
+
+                    <label for="item_name">
+                        Item Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="item_name"
+                        name="item_name"
+                        value="{{ item[1] }}"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- CATEGORY -->
+
+                <div class="form-group">
+
+                    <label for="category">
+                        Category
+                    </label>
+
+                    <select
+                        id="category"
+                        name="category"
+                        required
+                    >
+
+                        <option value="wallet"
+                            {% if item[2]|lower == "wallet" %}
+                                selected
+                            {% endif %}>
+                            Wallet
+                        </option>
+
+                        <option value="phone"
+                            {% if item[2]|lower == "phone" %}
+                                selected
+                            {% endif %}>
+                            Phone
+                        </option>
+
+                        <option value="laptop"
+                            {% if item[2]|lower == "laptop" %}
+                                selected
+                            {% endif %}>
+                            Laptop
+                        </option>
+
+                        <option value="bag"
+                            {% if item[2]|lower == "bag" %}
+                                selected
+                            {% endif %}>
+                            Bag
+                        </option>
+
+                        <option value="book"
+                            {% if item[2]|lower == "book" %}
+                                selected
+                            {% endif %}>
+                            Book
+                        </option>
+
+                        <option value="id-card"
+                            {% if item[2]|lower == "id-card" %}
+                                selected
+                            {% endif %}>
+                            ID Card
+                        </option>
+
+                        <option value="keys"
+                            {% if item[2]|lower == "keys" %}
+                                selected
+                            {% endif %}>
+                            Keys
+                        </option>
+
+                        <option value="other"
+                            {% if item[2]|lower == "other" %}
+                                selected
+                            {% endif %}>
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="form-group">
+
+                    <label for="description">
+                        Description
+                    </label>
+
+                    <textarea
+                        id="description"
+                        name="description"
+                        required
+                    >{{ item[3] }}</textarea>
+
+                </div>
+
+
+                <!-- LOCATION -->
+
+                <div class="form-group">
+
+                    <label for="location">
+                        Location
+                    </label>
+
+                    <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        value="{{ item[4] }}"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- DATE -->
+
+                <div class="form-group">
+
+                    <label for="date_lost">
+                        Date Lost
+                    </label>
+
+                    <input
+                        type="date"
+                        id="date_lost"
+                        name="date_lost"
+                        value="{{ item[5] }}"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- CONTACT -->
+
+                <div class="form-group">
+
+                    <label for="contact">
+                        Contact
+                    </label>
+
+                    <input
+                        type="text"
+                        id="contact"
+                        name="contact"
+                        value="{{ item[7] or '' }}"
+                        placeholder="Phone number or email"
+                    >
+
+                </div>
+
+
+                <!-- CURRENT IMAGE -->
+
+                {% if item[6] %}
+
+                    <div class="form-group">
+
+                        <label>
+                            Current Image
+                        </label>
+
+                        <div class="current-image">
+
+                            <img
+                                src="{{ url_for(
+                                    'static',
+                                    filename=item[6].replace(
+                                        'static/',
+                                        ''
+                                    )
+                                ) }}"
+                                alt="Lost item"
+                            >
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- NEW IMAGE -->
+
+                <div class="form-group">
+
+                    <label for="image">
+                        Replace Image
+                    </label>
+
+                    <input
+                        type="file"
+                        id="image"
+                        name="image"
+                        accept=".jpg,.jpeg,.png,.webp"
+                    >
+
+                </div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="button-row">
+
+                    <button
+                        type="submit"
+                        class="save-btn"
+                    >
+                        Save Changes
+                    </button>
+
+                    <a
+                        href="{{ url_for('my_reports') }}"
+                        class="cancel-btn"
+                    >
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

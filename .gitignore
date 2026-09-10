@@ -1,0 +1,10 @@
+venv/
+__pycache__/
+*.pyc
+
+lost_found.db
+
+static/uploads/lost/*
+static/uploads/found/*
+
+.env

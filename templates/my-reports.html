@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Reports | FindBack</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f9fc;
+            color: #172033;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            height: 72px;
+            background: white;
+            border-bottom: 1px solid #e8edf5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #526071;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #2563eb;
+        }
+
+        .nav-button {
+            background: #2563eb;
+            color: white !important;
+            padding: 10px 18px;
+            border-radius: 8px;
+        }
+
+        /* PAGE */
+        .page {
+            max-width: 1150px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #eff6ff;
+            color: #2563eb;
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .page-header h1 {
+            font-size: 36px;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #6b7280;
+            font-size: 15px;
+        }
+
+        /* ACTIONS */
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .action-button {
+            text-decoration: none;
+            padding: 11px 17px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .lost-button {
+            background: #2563eb;
+            color: white;
+        }
+
+        .found-button {
+            background: white;
+            color: #2563eb;
+            border: 1px solid #cbd5e1;
+        }
+
+        /* SECTION */
+        .section {
+            margin-bottom: 42px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            margin-bottom: 18px;
+            color: #111827;
+        }
+
+        /* GRID */
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .report-card {
+            background: white;
+            border: 1px solid #e5eaf1;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(20, 40, 80, 0.05);
+        }
+
+        .report-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background: #f1f5f9;
+        }
+
+        .no-image {
+            height: 180px;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .status {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 5px 9px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+
+        .lost-status {
+            background: #fff1f2;
+            color: #be123c;
+        }
+
+        .found-status {
+            background: #ecfdf5;
+            color: #047857;
+        }
+
+        .card-content h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #111827;
+        }
+
+        .category {
+            font-size: 13px;
+            color: #2563eb;
+            font-weight: 600;
+            text-transform: capitalize;
+            margin-bottom: 10px;
+        }
+
+        .details {
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.7;
+        }
+
+        .delete-button {
+            display: inline-block;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #dc2626;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .delete-button:hover {
+            text-decoration: underline;
+        }
+
+        /* EMPTY STATE */
+        .empty {
+            background: white;
+            border: 1px solid #e5eaf1;
+            border-radius: 14px;
+            padding: 45px 25px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .empty h3 {
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .empty p {
+            font-size: 14px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .reports-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                gap: 10px;
+            }
+
+            .nav-links a:not(.nav-button) {
+                display: none;
+            }
+
+            .page {
+                margin-top: 35px;
+            }
+
+            .page-header h1 {
+                font-size: 30px;
+            }
+
+            .reports-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+
+        <a href="{{ url_for('home') }}" class="logo">
+            FindBack
+        </a>
+
+        <div class="nav-links">
+
+            <a href="{{ url_for('lost_items') }}">
+                Lost Items
+            </a>
+
+            <a href="{{ url_for('found_items') }}">
+                Found Items
+            </a>
+
+            <a href="{{ url_for('my_reports') }}">
+                My Reports
+            </a>
+
+            <a href="{{ url_for('notifications') }}">
+                Notifications
+            </a>
+
+            <a href="{{ url_for('logout') }}" class="nav-button">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- PAGE -->
+    <main class="page">
+
+        <div class="page-header">
+
+            <span class="tag">
+                DASHBOARD
+            </span>
+
+            <h1>My Reports</h1>
+
+            <p>
+                Manage the items you have reported on FindBack.
+            </p>
+
+        </div>
+
+
+        <!-- ACTION BUTTONS -->
+        <div class="actions">
+
+            <a
+                href="{{ url_for('report_lost') }}"
+                class="action-button lost-button"
+            >
+                + Report Lost Item
+            </a>
+
+            <a
+                href="{{ url_for('report_found') }}"
+                class="action-button found-button"
+            >
+                + Report Found Item
+            </a>
+
+        </div>
+
+
+        <!-- LOST REPORTS -->
+        <section class="section">
+
+            <h2 class="section-title">
+                Lost Items
+            </h2>
+
+
+            {% if lost_items %}
+
+            <div class="reports-grid">
+
+                {% for item in lost_items %}
+
+                <div class="report-card">
+
+                    {% if item[6] %}
+
+                        <img
+                            src="{{ url_for('static', filename=item[6].replace('static/', '').replace('\\', '/')) }}"
+                            class="report-image"
+                            alt="{{ item[1] }}"
+                        >
+
+                    {% else %}
+
+                        <div class="no-image">
+                            No image available
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="card-content">
+
+                        <span class="status lost-status">
+                            LOST
+                        </span>
+
+                        <h3>
+                            {{ item[1] }}
+                        </h3>
+
+                        <div class="category">
+                            {{ item[2] }}
+                        </div>
+
+                        <div class="details">
+
+                            📍 {{ item[4] }}<br>
+
+                            📅 {{ item[5] }}<br>
+
+                            {{ item[3] }}
+
+                        </div>
+
+
+                        <a
+                            href="{{ url_for('edit_lost', item_id=item[0]) }}"
+                            class="delete-button"
+                            style="color:#2563eb; margin-right:15px;"
+                        >
+                            Edit
+                        </a>
+
+                        <a
+                            href="{{ url_for('delete_lost', item_id=item[0]) }}"
+                            class="delete-button"
+                            onclick="return confirm('Delete this lost item report?');"
+                        >
+                            Delete
+                        </a>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+
+                <h3>No lost items reported</h3>
+
+                <p>
+                    You haven't reported any lost items yet.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- FOUND REPORTS -->
+        <section class="section">
+
+            <h2 class="section-title">
+                Found Items
+            </h2>
+
+
+            {% if found_items %}
+
+            <div class="reports-grid">
+
+                {% for item in found_items %}
+
+                <div class="report-card">
+
+                    {% if item[6] %}
+
+                        <img
+                            src="{{ url_for('static', filename=item[6].replace('static/', '').replace('\\', '/')) }}"
+                            class="report-image"
+                            alt="{{ item[1] }}"
+                        >
+
+                    {% else %}
+
+                        <div class="no-image">
+                            No image available
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="card-content">
+
+                        <span class="status found-status">
+                            FOUND
+                        </span>
+
+                        <h3>
+                            {{ item[1] }}
+                        </h3>
+
+                        <div class="category">
+                            {{ item[2] }}
+                        </div>
+
+                        <div class="details">
+
+                            📍 {{ item[4] }}<br>
+
+                            📅 {{ item[5] }}<br>
+
+                            {{ item[3] }}
+
+                        </div>
+
+
+                        <a
+                            href="{{ url_for('delete_found', item_id=item[0]) }}"
+                            class="delete-button"
+                            onclick="return confirm('Delete this found item report?');"
+                        >
+                            Delete
+                        </a>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+
+                <h3>No found items reported</h3>
+
+                <p>
+                    You haven't reported any found items yet.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Report Found | FindBack</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f9fc;
+            color: #172033;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            height: 70px;
+            background: white;
+            border-bottom: 1px solid #e5e9f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+        }
+
+        .logo {
+            color: #2563eb;
+            font-size: 24px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #5f6878;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover {
+            color: #2563eb;
+        }
+
+        /* PAGE */
+
+        .page {
+            max-width: 1150px;
+            margin: auto;
+            padding: 45px 24px 70px;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #eef4ff;
+            color: #2563eb;
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .page-header h1 {
+            font-size: 38px;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #707a8c;
+            font-size: 15px;
+        }
+
+        /* LAYOUT */
+
+        .content {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 25px;
+            align-items: start;
+        }
+
+        /* FORM */
+
+        .form-card,
+        .ai-card {
+            background: white;
+            border: 1px solid #e5e9f0;
+            border-radius: 18px;
+            padding: 28px;
+            box-shadow: 0 8px 30px rgba(20, 30, 50, 0.04);
+        }
+
+        .form-card h2 {
+            font-size: 20px;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            color: #7b8494;
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #344054;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            border: 1px solid #dce2eb;
+            border-radius: 10px;
+            padding: 13px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #2563eb;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* IMAGE */
+
+        .camera-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .camera-button,
+        .capture-button,
+        .close-button {
+            border: none;
+            border-radius: 9px;
+            padding: 11px 16px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .camera-button {
+            background: #eef4ff;
+            color: #2563eb;
+        }
+
+        .capture-button {
+            background: #2563eb;
+            color: white;
+        }
+
+        .close-button {
+            background: #f1f3f6;
+            color: #374151;
+        }
+
+        .camera-box {
+            display: none;
+            margin-top: 15px;
+            background: #111827;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        #camera {
+            width: 100%;
+            display: block;
+            max-height: 350px;
+            object-fit: cover;
+        }
+
+        .camera-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px;
+        }
+
+        .capture-button {
+            display: none;
+        }
+
+        .image-input {
+            margin-top: 12px;
+        }
+
+        .help-text {
+            color: #8a93a2;
+            font-size: 12px;
+            margin-top: 7px;
+        }
+
+        /* SUBMIT */
+
+        .submit-button {
+            width: 100%;
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .submit-button:hover {
+            background: #1d4ed8;
+        }
+
+        /* AI CARD */
+
+        .ai-card {
+            position: sticky;
+            top: 90px;
+        }
+
+        .ai-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .ai-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #eef4ff;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+        }
+
+        .ai-title h2 {
+            font-size: 18px;
+        }
+
+        .ready {
+            background: #ecfdf3;
+            color: #15803d;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .ai-description {
+            color: #707a8c;
+            font-size: 13px;
+            line-height: 1.6;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #edf0f5;
+        }
+
+        .signal {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f2f6;
+        }
+
+        .signal-name {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .signal-score {
+            color: #9aa3b2;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .status {
+            background: #f7f9fc;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+
+        .status-label {
+            color: #8a93a2;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .status-text {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .status-description {
+            color: #7b8494;
+            font-size: 12px;
+            margin-top: 5px;
+            line-height: 1.5;
+        }
+
+        /* MATCH RESULTS */
+
+        .match-title {
+            font-size: 17px;
+            margin: 22px 0 14px;
+        }
+
+        .match {
+            border: 1px solid #e5e9f0;
+            border-radius: 12px;
+            padding: 13px;
+            margin-bottom: 12px;
+        }
+
+        .match-name {
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .match-location {
+            color: #7b8494;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .match-score {
+            color: #2563eb;
+            font-weight: 800;
+            margin-top: 8px;
+        }
+
+        .match-level {
+            display: inline-block;
+            margin-top: 6px;
+            background: #eef4ff;
+            color: #2563eb;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .success {
+            background: #ecfdf3;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: white;
+            border-top: 1px solid #e7ebf1;
+            text-align: center;
+            padding: 25px;
+            color: #8a93a2;
+            font-size: 12px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            .ai-card {
+                position: static;
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            .nav-links a {
+                display: none;
+            }
+
+            .page {
+                padding: 35px 18px 60px;
+            }
+
+            .page-header h1 {
+                font-size: 30px;
+            }
+
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+
+    <a href="{{ url_for('home') }}" class="logo">
+        FindBack
+    </a>
+
+    <div class="nav-links">
+
+        <a href="{{ url_for('home') }}">Home</a>
+
+        <a href="{{ url_for('lost_items') }}">Lost Items</a>
+
+        <a href="{{ url_for('found_items') }}">Found Items</a>
+
+        <a href="{{ url_for('my_reports') }}">My Reports</a>
+
+        <a href="{{ url_for('notifications') }}">Notifications</a>
+
+        <a href="{{ url_for('logout') }}">Logout</a>
+
+    </div>
+
+</nav>
+
+
+<!-- MAIN -->
+
+<main class="page">
+
+
+    <div class="page-header">
+
+        <span class="tag">
+            REPORT FOUND ITEM
+        </span>
+
+        <h1>
+            Help return something that was found.
+        </h1>
+
+        <p>
+            Enter the details of the item you found and FindBack will look for possible matches.
+        </p>
+
+    </div>
+
+
+    <div class="content">
+
+
+        <!-- LEFT SIDE -->
+
+        <div class="form-card">
+
+            <h2>
+                Found Item Details
+            </h2>
+
+            <p class="subtitle">
+                Provide accurate information about the item.
+            </p>
+
+
+            {% if submitted %}
+
+                <div class="success">
+                    ✓ Your found item was reported successfully.
+                </div>
+
+            {% endif %}
+
+
+            <form
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
+
+                <!-- ITEM NAME -->
+
+                <div class="form-group">
+
+                    <label>
+                        Item Name *
+                    </label>
+
+                    <input
+                        type="text"
+                        name="item_name"
+                        placeholder="Example: Black Wallet"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- CATEGORY + DATE -->
+
+                <div class="two-column">
+
+                    <div class="form-group">
+
+                        <label>
+                            Category *
+                        </label>
+
+                        <select
+                            name="category"
+                            required
+                        >
+
+                            <option value="">
+                                Select category
+                            </option>
+
+                            <option value="wallet">
+                                Wallet
+                            </option>
+
+                            <option value="phone">
+                                Phone
+                            </option>
+
+                            <option value="laptop">
+                                Laptop
+                            </option>
+
+                            <option value="bag">
+                                Bag
+                            </option>
+
+                            <option value="keys">
+                                Keys
+                            </option>
+
+                            <option value="documents">
+                                Documents
+                            </option>
+
+                            <option value="camera">
+                                Camera
+                            </option>
+
+                            <option value="other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Date Found *
+                        </label>
+
+                        <input
+                            type="date"
+                            name="date_found"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="form-group">
+
+                    <label>
+                        Description *
+                    </label>
+
+                    <textarea
+                        name="description"
+                        placeholder="Describe the colour, brand, marks, stickers, case, or other details..."
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <!-- LOCATION -->
+
+                <div class="form-group">
+
+                    <label>
+                        Location Found *
+                    </label>
+
+                    <input
+                        type="text"
+                        name="location"
+                        placeholder="Example: College Library"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- IMAGE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Item Image
+                    </label>
+
+
+                    <div class="camera-buttons">
+
+                        <button
+                            type="button"
+                            class="camera-button"
+                            onclick="startCamera()"
+                        >
+                            📷 Use Camera
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        class="camera-box"
+                        id="cameraBox"
+                    >
+
+                        <video
+                            id="camera"
+                            autoplay
+                            playsinline
+                        ></video>
+
+
+                        <div class="camera-controls">
+
+                            <button
+                                type="button"
+                                class="capture-button"
+                                id="captureButton"
+                                onclick="capturePhoto()"
+                            >
+                                Take Photo
+                            </button>
+
+                            <button
+                                type="button"
+                                class="close-button"
+                                onclick="stopCamera()"
+                            >
+                                Close
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <input
+                        type="file"
+                        name="image"
+                        id="imageInput"
+                        class="image-input"
+                        accept="image/*"
+                    >
+
+
+                    <p class="help-text">
+                        Upload an image or use your camera.
+                    </p>
+
+                </div>
+
+
+                <!-- SUBMIT -->
+
+                <button
+                    type="submit"
+                    class="submit-button"
+                >
+                    Report Found Item & Run AI Matching
+                </button>
+
+
+            </form>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+
+        <div class="ai-card">
+
+
+            <div class="ai-header">
+
+                <div class="ai-title">
+
+                    <div class="ai-icon">
+                        ✦
+                    </div>
+
+                    <h2>
+                        AI Match Analysis
+                    </h2>
+
+                </div>
+
+                <span class="ready">
+                    READY
+                </span>
+
+            </div>
+
+
+            <p class="ai-description">
+
+                FindBack compares your found item with existing lost reports using
+                text, category, location and image similarity.
+
+            </p>
+
+
+            {% if submitted and matches %}
+
+
+                <h3 class="match-title">
+                    Possible Matches
+                </h3>
+
+
+                {% for match in matches %}
+
+                    <div class="match">
+
+                        <div class="match-name">
+                            {{ match.name }}
+                        </div>
+
+                        <div class="match-location">
+                            📍 {{ match.location }}
+                        </div>
+
+                        <div class="match-score">
+                            {{ match.score }}%
+                        </div>
+
+                        <span class="match-level">
+                            {{ match.match_level }}
+                        </span>
+
+                    </div>
+
+                {% endfor %}
+
+
+            {% elif submitted %}
+
+
+                <div class="status">
+
+                    <div class="status-label">
+                        Result
+                    </div>
+
+                    <div class="status-text">
+                        No matching lost item found
+                    </div>
+
+                    <div class="status-description">
+                        Your found item has been saved successfully.
+                    </div>
+
+                </div>
+
+
+            {% else %}
+
+
+                <div class="signal">
+
+                    <span class="signal-name">
+                        📝 Text Similarity
+                    </span>
+
+                    <span class="signal-score">
+                        —
+                    </span>
+
+                </div>
+
+
+                <div class="signal">
+
+                    <span class="signal-name">
+                        🖼️ Image Similarity
+                    </span>
+
+                    <span class="signal-score">
+                        —
+                    </span>
+
+                </div>
+
+
+                <div class="signal">
+
+                    <span class="signal-name">
+                        📍 Location Match
+                    </span>
+
+                    <span class="signal-score">
+                        —
+                    </span>
+
+                </div>
+
+
+                <div class="status">
+
+                    <div class="status-label">
+                        Current Status
+                    </div>
+
+                    <div class="status-text">
+                        Waiting for item details
+                    </div>
+
+                    <div class="status-description">
+                        Submit the form to run AI matching against existing lost reports.
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<footer>
+
+    FindBack &copy; 2026 · AI-powered Lost & Found Platform
+
+</footer>
+
+
+<!-- CAMERA JAVASCRIPT -->
+
+<script>
+
+    let cameraStream = null;
+
+
+    async function startCamera() {
+
+        try {
+
+            cameraStream = await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: false
+            });
+
+
+            const camera = document.getElementById("camera");
+
+            camera.srcObject = cameraStream;
+
+
+            document.getElementById("cameraBox").style.display = "block";
+
+            document.getElementById("captureButton").style.display = "inline-block";
+
+        }
+
+        catch (error) {
+
+            alert(
+                "Camera access failed. Please allow camera permission or upload an image instead."
+            );
+
+            console.error(error);
+
+        }
+
+    }
+
+
+    function capturePhoto() {
+
+        const camera = document.getElementById("camera");
+
+        const canvas = document.createElement("canvas");
+
+        canvas.width = camera.videoWidth;
+
+        canvas.height = camera.videoHeight;
+
+
+        const context = canvas.getContext("2d");
+
+        context.drawImage(
+            camera,
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+
+        canvas.toBlob(function(blob) {
+
+            const file = new File(
+                [blob],
+                "camera-photo.jpg",
+                {
+                    type: "image/jpeg"
+                }
+            );
+
+
+            const dataTransfer = new DataTransfer();
+
+            dataTransfer.items.add(file);
+
+
+            document.getElementById("imageInput").files =
+                dataTransfer.files;
+
+
+            stopCamera();
+
+        }, "image/jpeg", 0.9);
+
+    }
+
+
+    function stopCamera() {
+
+        if (cameraStream) {
+
+            cameraStream.getTracks().forEach(
+                track => track.stop()
+            );
+
+            cameraStream = null;
+
+        }
+
+
+        const camera = document.getElementById("camera");
+
+        camera.srcObject = null;
+
+
+        document.getElementById("cameraBox").style.display = "none";
+
+        document.getElementById("captureButton").style.display = "none";
+
+    }
+
+</script>
+
+
+</body>
+
+</html>
